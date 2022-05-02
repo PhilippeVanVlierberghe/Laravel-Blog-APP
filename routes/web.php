@@ -40,3 +40,7 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::post('edit', [PostController::class, 'postAdminUpdate'])->name('admin.update');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
