@@ -7,7 +7,8 @@ use App\Models\Post;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use App\Models\Tag;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 class PostController extends BaseController
 {
     public function getIndex()
@@ -60,15 +61,15 @@ class PostController extends BaseController
             'title' => 'required|min:5',
             'content' => 'required|min:10'
         ]);
-        /*
-        $post = new Post();
-        $post->addPost($session, $request->input('title'), $request->input('content'));
-        */
+        $user = User::find(Auth::id()); // dit is nieuwe code, geen idee of dit zal werken.
+        if(!$user){
+            return redirect()->back();//error message 
+        }
         $post = new Post([
             'title' => $request->input('title'),
             'content' => $request->input('content')
         ]);
-        $post->save();
+        $user->posts()->save($post);
         $post->tags()->attach($request->input('tags') === null ? [] : $request->input('tags'));
         return redirect()->route('admin.index')->with('info', 'Post created, Title is: ' . $request->input('title'));
     }

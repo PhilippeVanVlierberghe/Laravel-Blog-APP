@@ -15,6 +15,10 @@ class Post extends Model
     public function tags(){
         return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id')->withTimestamps();
     }
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
     // Lavarel data Mutator  => store data as 
     // Laravel data Accessor => show data as
     // Laravel Pagination in de postcontroller
