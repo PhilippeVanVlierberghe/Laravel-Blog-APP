@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+
+
 class PostController extends BaseController
 {
     public function getIndex()
@@ -19,6 +22,10 @@ class PostController extends BaseController
 
     public function getAdminIndex()
     {
+        //No onauthenticated user is able to make/update posts
+        if (!Auth::check()) {
+            return redirect()->back();
+        }
         $posts = Post::orderBy('title', 'asc')->get();
         return view('admin.index', ['posts' => $posts]);
     }
@@ -42,15 +49,23 @@ class PostController extends BaseController
 
     public function getAdminCreate()
     {
+        //No onauthenticated user is able to make/update posts
+        if (!Auth::check()) {
+            return redirect()->back();
+        }
         $tags = Tag::all();
-        return view('admin.create',['tags' => $tags]);
+        return view('admin.create', ['tags' => $tags]);
     }
 
     public function getAdminEdit($id)
     {
+        //No onauthenticated user is able to make/update posts
+        if (!Auth::check()) {
+            return redirect()->back();
+        }
         $post = Post::find($id);
         $tags = Tag::all();
-        return view('admin.edit', ['post' => $post, 'postId' => $id],['tags' => $tags]);
+        return view('admin.edit', ['post' => $post, 'postId' => $id], ['tags' => $tags]);
     }
 
     public function postAdminCreate(
@@ -62,8 +77,8 @@ class PostController extends BaseController
             'content' => 'required|min:10'
         ]);
         $user = User::find(Auth::id()); // dit is nieuwe code, geen idee of dit zal werken.
-        if(!$user){
-            return redirect()->back();//error message 
+        if (!$user) {
+            return redirect()->back(); //error message 
         }
         $post = new Post([
             'title' => $request->input('title'),
@@ -74,14 +89,21 @@ class PostController extends BaseController
         return redirect()->route('admin.index')->with('info', 'Post created, Title is: ' . $request->input('title'));
     }
 
-    public function postAdminUpdate(
-        Request $request
-    ) {
+    public function postAdminUpdate(Request $request)
+    {
+        //No onauthenticated user is able to make/update posts
+        if (!Auth::check()) {
+            return redirect()->back();
+        }
         $request->validate([
             'title' => 'required|min:5',
             'content' => 'required|min:10'
         ]);
         $post = Post::find($request->input('id'));
+        //app\Providers\AuthServiceProvider.php
+        if(Gate::denies('manipulate-post',$post)){
+            return redirect()->back();
+        }
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->save();
@@ -94,7 +116,14 @@ class PostController extends BaseController
     //Dit werk perfect trouwens
     public function getAdminDelete($id)
     {
+        //No onauthenticated user is able to make/update posts
+        if (!Auth::check()) {
+            return redirect()->back();
+        }
         $post = Post::find($id);
+        if(Gate::denies('manipulate-post',$post)){
+            return redirect()->back();
+        }
         $post->likes()->delete();/* 1 op n*/
         $post->tags()->detach(); /* n op n*/
         $post->delete();

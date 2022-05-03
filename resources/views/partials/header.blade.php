@@ -1,24 +1,26 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a href="{{route('blog.index')}}" class="navbar-brand">Laravel Guide</a>
+            <a href="{{ route('blog.index') }}" class="navbar-brand">Laravel Guide</a>
             <ul class="nav navbar-nav">
-                <li><a href="{{route('blog.index')}}">Blog</a></li>
-                <li><a href="{{route('other.about')}}">About</a></li>
-                <li><a href="{{route('login')}}">Login</a></li>
-                <li><a href="{{route('register')}}">Register</a></li>
-                <li><a href="{{route('admin.index')}}">Posts</a></li>
+                <li><a href="{{ route('blog.index') }}">Blog</a></li>
+                <li><a href="{{ route('other.about') }}">About</a></li>
+                @if (!Auth::check())
+                    <li><a href="{{ route('login') }}">Login</a></li>
+                    <li><a href="{{ route('register') }}">Register</a></li>
+                @else
+                <li><a href="{{ route('admin.index') }}">Posts</a></li>
                 <li>
-                    <a href="{{ route('logout') }}"
-                    onclick="event.preventDefault();
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                   document.getElementById('logout-form').submit();">
-                    Logout
-                 </a>
+                        Logout
+                    </a>
 
-                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                     {{csrf_field()}}
-                 </form>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        {{ csrf_field() }}
+                    </form>
                 </li>
+                @endif
             </ul>
         </div>
     </div>

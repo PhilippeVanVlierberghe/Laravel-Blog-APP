@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SignInController;
 use Illuminate\Support\Facades\Auth;
 /*
 |--------------------------------------------------------------------------
@@ -44,3 +44,6 @@ Route::group(['prefix' => 'admin'], function () {
 });
 
 Auth::routes();
+
+Route::post('login', [SignInController::class, 'signIn'])->name('auth.Signin');
+

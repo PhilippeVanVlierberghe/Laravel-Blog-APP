@@ -16,6 +16,7 @@
     </div>
     <hr>
     @foreach ($posts as $post)
+        @if (Auth::user()->id == $post->user_id)
         <div class="rowExtra">
             <div class="col-md-12">
                 <p><strong>{{$post->title}}</strong> 
@@ -24,5 +25,6 @@
                 </p>
             </div>
         </div>
+        @endif
     @endforeach
 @endsection
