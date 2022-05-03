@@ -22,10 +22,11 @@ class PostController extends BaseController
 
     public function getAdminIndex()
     {
-        //No onauthenticated user is able to make/update posts
-        if (!Auth::check()) {
+        //No unauthenticated user is able to make/update posts
+        //Zie route file voor middleware oplossing
+        /*if (!Auth::check()) {
             return redirect()->back();
-        }
+        }*/
         $posts = Post::orderBy('title', 'asc')->get();
         return view('admin.index', ['posts' => $posts]);
     }
@@ -49,20 +50,22 @@ class PostController extends BaseController
 
     public function getAdminCreate()
     {
-        //No onauthenticated user is able to make/update posts
-        if (!Auth::check()) {
+        //No unauthenticated user is able to make/update posts
+        //Zie route file voor middleware oplossing
+        /*if (!Auth::check()) {
             return redirect()->back();
-        }
+        }*/
         $tags = Tag::all();
         return view('admin.create', ['tags' => $tags]);
     }
 
     public function getAdminEdit($id)
     {
-        //No onauthenticated user is able to make/update posts
-        if (!Auth::check()) {
+        //No unauthenticated user is able to make/update posts
+        //Zie route file voor middleware oplossing
+        /*if (!Auth::check()) {
             return redirect()->back();
-        }
+        }*/
         $post = Post::find($id);
         $tags = Tag::all();
         return view('admin.edit', ['post' => $post, 'postId' => $id], ['tags' => $tags]);
@@ -91,10 +94,11 @@ class PostController extends BaseController
 
     public function postAdminUpdate(Request $request)
     {
-        //No onauthenticated user is able to make/update posts
-        if (!Auth::check()) {
+        //No unauthenticated user is able to make/update posts
+        //Zie route file voor middleware oplossing
+        /*if (!Auth::check()) {
             return redirect()->back();
-        }
+        }*/
         $request->validate([
             'title' => 'required|min:5',
             'content' => 'required|min:10'
@@ -116,10 +120,11 @@ class PostController extends BaseController
     //Dit werk perfect trouwens
     public function getAdminDelete($id)
     {
-        //No onauthenticated user is able to make/update posts
-        if (!Auth::check()) {
+        //No unauthenticated user is able to make/update posts
+        //Zie route file voor middleware oplossing
+        /*if (!Auth::check()) {
             return redirect()->back();
-        }
+        }*/
         $post = Post::find($id);
         if(Gate::denies('manipulate-post',$post)){
             return redirect()->back();

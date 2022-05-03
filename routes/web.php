@@ -28,7 +28,7 @@ Route::get('about', function () {
     return view('other.about');
 })->name('other.about');
 
-Route::group(['prefix' => 'admin'], function () {
+Route::group(['prefix' => 'admin', 'middleware' =>['auth']], function () {
     Route::get('', [PostController::class, 'getAdminIndex'])->name('admin.index');
 
     Route::get('create', [PostController::class, 'getAdminCreate'])->name('admin.create');
