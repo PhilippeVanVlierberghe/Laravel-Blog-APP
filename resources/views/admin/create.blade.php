@@ -2,7 +2,6 @@
 
 @section('content')
     @include('partials.errors')
-    </div>
     <div class="rowExtra">
         <div class="col-md-12">
             <form action="{{ route('admin.create') }}" method="post">
